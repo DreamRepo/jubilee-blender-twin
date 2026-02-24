@@ -1,16 +1,3 @@
-## Configuration: animation_config.json
-
-All workflow parameters—such as camera position, lens, Blender executable path, rendering settings, and target object—are set in the `animation_config.json` file in this folder.
-
-- **Edit this file to control:**
-  - Camera position and zoom (`camera_offset`, `camera_lens`)
-  - Target object for framing
-  - Blender executable and .blend file paths
-  - Render resolution, FPS, and more
-  - Sacred experiment settings
-
-Both the Sacred runner and Blender animation scripts read their configuration from this JSON file. You only need to update `animation_config.json` to change parameters for the entire workflow.
-
 # Jubilee Blender Twin
 
 This repository contains a Blender-based *digital twin* of the Jubilee open‑source motion platform, plus Python helper scripts to drive and record motion tests.
@@ -210,17 +197,19 @@ Install MongoDB Community Edition from the official site (Windows installer):
 
 During setup you can accept the defaults so that a local server runs on `mongodb://localhost:27017`.
 
-### Configure Sacred + Blender integration
 
-In the repo root there is an `animation_config.json` file. At minimum it should define:
+## Configuration: animation_config.json
 
-```json
-{
-  "experiment_name": "jubilee_blender_gif",
-  "mongo_url": "mongodb://localhost:27017",
-  "mongo_db_name": "animate_jubilee"
-}
-```
+All workflow parameters—such as camera position, lens, Blender executable path, rendering settings, and target object—are set in the `animation_config.json` file in this folder.
+
+- **Edit this file to control:**
+  - Camera position and zoom (`camera_offset`, `camera_lens`)
+  - Target object for framing
+  - Blender executable and .blend file paths
+  - Render resolution, FPS, and more
+  - Sacred experiment settings
+
+Both the Sacred runner and Blender animation scripts read their configuration from this JSON file. You only need to update `animation_config.json` to change parameters for the entire workflow.
 
 `sacred_runner.py` will read these values to construct the Sacred experiment and connect to MongoDB, then extend this JSON with all the animation and path parameters for each run.
 
