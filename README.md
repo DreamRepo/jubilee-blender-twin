@@ -134,7 +134,7 @@ All scripts expect axis‑object names:
 ## Animating the Jubilee with G-code
 
 This project allows you to visualize and animate Jubilee toolpaths directly from G-code using Blender.
-
+This is heavily inspired from: https://github.com/TanmayChhatbar/blender_3d_print_animation.
 ### Workflow
 
 1. **Generate G-code**
