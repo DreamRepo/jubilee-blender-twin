@@ -1,9 +1,22 @@
+## Configuration: animation_config.json
+
+All workflow parameters—such as camera position, lens, Blender executable path, rendering settings, and target object—are set in the `animation_config.json` file in this folder.
+
+- **Edit this file to control:**
+  - Camera position and zoom (`camera_offset`, `camera_lens`)
+  - Target object for framing
+  - Blender executable and .blend file paths
+  - Render resolution, FPS, and more
+  - Sacred experiment settings
+
+Both the Sacred runner and Blender animation scripts read their configuration from this JSON file. You only need to update `animation_config.json` to change parameters for the entire workflow.
+
 # Jubilee Blender Twin
 
 This repository contains a Blender-based *digital twin* of the Jubilee open‑source motion platform, plus Python helper scripts to drive and record motion tests.
 
 
-![Jubilee test animation](docs/jubilee_test.gif)
+![Jubilee test animation](docs/animation_axis.gif)
 
 
 ## Who this is for (and what this is for)
@@ -172,6 +185,10 @@ At a high level it:
    - Optionally collects the first rendered frame.
 
 These GIFs can then be embedded in documentation (including this README), and the corresponding Sacred run in MongoDB tells you exactly **which parameters** produced each GIF.
+
+![Jubilee test animation](docs/animation_labware.gif)
+
+
 
 ### Setup: Python virtualenv with Sacred
 

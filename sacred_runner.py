@@ -1,3 +1,4 @@
+
 import os
 import json
 import subprocess
@@ -7,20 +8,9 @@ from sacred.observers import MongoObserver
 REPO_ROOT = os.path.dirname(__file__)
 CONFIG_FILE = os.path.join(REPO_ROOT, "animation_config.json")
 
-
-def _load_base_json(path: str) -> dict:
-    """Load initial settings from animation_config.json if it exists."""
-    if not os.path.exists(path):
-        return {}
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"[sacred] Could not read base JSON config '{path}': {e}")
-        return {}
-
-
-_BASE = _load_base_json(CONFIG_FILE)
+# Only read config, never write
+with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+    _BASE = json.load(f)
 
 _DEFAULT_EXPERIMENT_NAME = _BASE.get("experiment_name", "jubilee_blender_gif")
 _DEFAULT_MONGO_URL = _BASE.get("mongo_url", "mongodb://localhost:27017")
@@ -36,24 +26,25 @@ except Exception as e:
     print(f"[sacred] Could not attach MongoObserver: {e}")
 
 
+
 @ex.config
 def cfg():
-
-
     # Blender invocation
-    blender_exe = r"C:\\Program Files\\Blender Foundation\\Blender 5.0\\blender.exe"
-    blend_file = os.path.join(REPO_ROOT, "jubilee.blend")
-    script_file = os.path.join(REPO_ROOT, "animation_to_gif.py")
+    blender_exe = _BASE.get("blender_exe", r"C:\\Program Files\\Blender Foundation\\Blender 5.0\\blender.exe")
+    blend_file = _BASE.get("blend_file", os.path.join(REPO_ROOT, "jubilee.blend"))
+    script_file = _BASE.get("script_file", os.path.join(REPO_ROOT, "animation_to_gif.py"))
 
     # These mirror the constants in animation_to_gif.py
-    test_mode = False
-    test_max_frames = 5
-    fps = 24
-    scale_width = 640
-    render_res_x = 800
-    render_res_y = 800
-    render_res_percent = 100
-    target_object_name = "XY-carriage"
+    test_mode = _BASE.get("test_mode", False)
+    test_max_frames = _BASE.get("test_max_frames", 5)
+    fps = _BASE.get("fps", 24)
+    scale_width = _BASE.get("scale_width", 320)
+    render_res_x = _BASE.get("render_res_x", 300)
+    render_res_y = _BASE.get("render_res_y", 300)
+    render_res_percent = _BASE.get("render_res_percent", 100)
+    target_object_name = _BASE.get("target_object_name", "XY-carriage")
+    camera_offset = _BASE.get("camera_offset", [0.7, -1.2, 1.1])
+    camera_lens = _BASE.get("camera_lens", 50)
 
 
 @ex.automain
@@ -71,25 +62,6 @@ def run(_run,
         target_object_name):
     """Sacred entry: write JSON config (including paths), then call Blender."""
 
-    cfg = {
-        "experiment_name": _DEFAULT_EXPERIMENT_NAME,
-        "mongo_url": _DEFAULT_MONGO_URL,
-        "mongo_db_name": _DEFAULT_MONGO_DB,
-        "blender_exe": str(blender_exe),
-        "blend_file": str(blend_file),
-        "script_file": str(script_file),
-        "test_mode": bool(test_mode),
-        "test_max_frames": int(test_max_frames),
-        "fps": int(fps),
-        "scale_width": int(scale_width),
-        "render_res_x": int(render_res_x),
-        "render_res_y": int(render_res_y),
-        "render_res_percent": int(render_res_percent),
-        "target_object_name": str(target_object_name),
-    }
-
-    with open(CONFIG_FILE, "w", encoding="utf-8") as f:
-        json.dump(cfg, f, indent=2)
 
     _run.info["config_file"] = CONFIG_FILE
 

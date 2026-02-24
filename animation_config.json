@@ -3,14 +3,15 @@
   "mongo_url": "mongodb://localhost:27017",
   "mongo_db_name": "animate_jubilee",
   "blender_exe": "C:\\\\Program Files\\\\Blender Foundation\\\\Blender 5.0\\\\blender.exe",
-  "blend_file": "C:\\Users\\Alienor\\Documents\\Projects\\Jubilee\\animate_jubilee\\jubilee_twin_blender\\jubilee.blend",
-  "script_file": "C:\\Users\\Alienor\\Documents\\Projects\\Jubilee\\animate_jubilee\\jubilee_twin_blender\\animation_to_gif.py",
+  "blend_file": "jubilee.blend",
+  "script_file": "animation_to_gif.py",
   "test_mode": false,
   "test_max_frames": 5,
   "fps": 24,
-  "scale_width": 640,
-  "render_res_x": 800,
-  "render_res_y": 800,
+  "scale_width": 320,
+  "render_res_x": 400,
+  "render_res_y": 400,
   "render_res_percent": 100,
-  "target_object_name": "XY-carriage"
+  "target_object_name": "XY-carriage",
+  "camera_offset": [0.5, 0, 1.1]
 }

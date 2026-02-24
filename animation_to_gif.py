@@ -60,7 +60,7 @@ def load_config_from_json():
     TARGET_OBJECT_NAME = str(cfg.get("target_object_name", TARGET_OBJECT_NAME))
 
 
-def setup_camera(scene, target_object_name):
+def setup_camera(scene, target_object_name, camera_offset=None, camera_lens=None):
     """Place and aim the active camera to nicely frame the target object.
 
     Runs in background (no UI) so we do manual math instead of using view3d ops.
@@ -83,10 +83,10 @@ def setup_camera(scene, target_object_name):
 
     target_loc = obj.matrix_world.translation
 
-    # Position camera at an offset so Jubilee is viewed in 3/4 perspective
-    # Tune this vector if you want a different angle or more/less zoom.
-    offset = Vector((0.7, -1.2, 1.1))  # (X, Y, Z) in meters
-
+    # Use config offset or default
+    if camera_offset is None:
+        camera_offset = (0.7, -1.2, 1.1)
+    offset = Vector(camera_offset)
     cam_obj.location = target_loc + offset
 
     # Point camera at the target
@@ -94,9 +94,9 @@ def setup_camera(scene, target_object_name):
     if direction.length_squared != 0.0:
         cam_obj.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
 
-    # Use a slightly longer focal length to "zoom in" visually
+    # Use config lens or default
     if isinstance(cam_obj.data, bpy.types.Camera):
-        cam_obj.data.lens = 50  # mm
+        cam_obj.data.lens = camera_lens if camera_lens is not None else 50
 
     print(f"[camera] Framed '{target_object_name}' from {cam_obj.location}.")
 
@@ -136,7 +136,20 @@ def main():
 
     # Improve visibility/brightness and framing before rendering
     setup_brightness(scene)
-    setup_camera(scene, TARGET_OBJECT_NAME)
+    # Load camera config from JSON if available
+    import os, json
+    config_path = os.path.join(os.path.dirname(__file__), "animation_config.json")
+    camera_offset = None
+    camera_lens = None
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, "r", encoding="utf-8") as f:
+                cfg = json.load(f)
+                camera_offset = cfg.get("camera_offset", None)
+                camera_lens = cfg.get("camera_lens", None)
+        except Exception as e:
+            print(f"[camera] Could not read camera config: {e}")
+    setup_camera(scene, TARGET_OBJECT_NAME, camera_offset, camera_lens)
 
     # Use current timeline range; optionally clamp for quick tests
     orig_start = scene.frame_start
