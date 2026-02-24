@@ -119,6 +119,44 @@ All scripts expect axis‑object names:
 - `Z-axis`
 
 
+#### Important:
+- **Z min and axis direction:**
+  - The Z minimum (from the Z-axis object's LIMIT_LOCATION constraint) determines the lowest position for Z in the animation. Make sure this matches your machine's physical zero.
+  - Double-check that the positive direction of each axis in Blender matches the real Jubilee machine. For Z, positive should be up (away from the bed); if not, adjust your Blender object orientation or the script accordingly.
+- **Units and dimensions:**
+  - Ensure your G-code, Blender scene, and machine all use the same units (typically millimeters). If your Blender scene is in meters but your G-code is in millimeters, scale accordingly or set Blender's unit system to millimeters for accurate visualization.
+- The script expects Blender objects named `X-axis`, `Y-axis`, and optionally `Z-axis`.
+- Axis minimum positions are read from Blender's axis constraints (LIMIT_LOCATION).
+- The animation speed can be adjusted by changing `SPEED_FACTOR` in `from_gcode/animate_path.py`.
+- The scene's end frame is set automatically to fit the animation.
+
+
+## Animating the Jubilee with G-code
+
+This project allows you to visualize and animate Jubilee toolpaths directly from G-code using Blender.
+
+### Workflow
+
+1. **Generate G-code**
+  - Use your preferred tool (e.g., science-jubilee) to generate a G-code file. The latest G-code should be saved as `science_jubilee/gcode_logs/latest.gcode`.
+
+2. **Run the Animation Batch Script**
+  - Execute `from_gcode/run_latest_gcode_animation.bat`.
+  - This will:
+    - Copy the latest G-code to the animation folder
+    - Parse the G-code and generate a toolpath CSV
+    - Launch Blender, open `jubilee.blend`, and animate the axes using the toolpath
+
+3. **View the Animation**
+  - Blender will open with the animation ready to play.
+  - Use the timeline/play controls to watch the axes move according to the G-code.
+
+### Notes
+- The script expects Blender objects named `X-axis`, `Y-axis`, and optionally `Z-axis`.
+- Axis minimum positions are read from Blender's axis constraints (LIMIT_LOCATION).
+- The animation speed can be adjusted by changing `SPEED_FACTOR` in `from_gcode/animate_path.py`.
+- The scene's end frame is set automatically to fit the animation.
+
 ## Recording GIFs and experiment metadata with Sacred
 
 The `sacred_runner.py` script is for **recording GIFs**, together with the parameters used to produce them, into MongoDB via [Sacred](https://github.com/IDSIA/sacred).

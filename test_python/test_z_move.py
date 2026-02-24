@@ -17,7 +17,7 @@ obj.keyframe_insert(data_path="location")
 
 # Frame 40: move +Z and keyframe
 scene.frame_set(40)
-obj.location.z += 0.2  # adjust for more/less travel
+obj.location.z += 20  # adjust for more/less travel
 obj.keyframe_insert(data_path="location")
 
 # Back to start

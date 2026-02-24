@@ -59,7 +59,7 @@ for obj in (y_gantry, x_axis, xy_carriage):
 # 2) Move Y gantry in +Y by 20 mm over f0→f1
 print("\n--- TEST 1: Animate Y gantry +20mm in Y ---")
 scene.frame_set(f1)
-y_gantry.location.y += 0.2
+y_gantry.location.y += 20
 key_loc(y_gantry, f1)
 
 # Keep others pinned so curves look nice
@@ -69,7 +69,7 @@ key_loc(xy_carriage, f1)
 # 3) Move X axis in +X by 30 mm over f1→f2
 print("\n--- TEST 2: Animate X axis +30mm in X ---")
 scene.frame_set(f2)
-x_axis.location.x += 0.2
+x_axis.location.x += 20
 key_loc(x_axis, f2)
 key_loc(y_gantry, f2)
 key_loc(xy_carriage, f2)
@@ -77,7 +77,7 @@ key_loc(xy_carriage, f2)
 # 4) Move XY carriage in +X by 10 mm over f2→f3
 print("\n--- TEST 3: Animate XY carriage +10mm in X ---")
 scene.frame_set(f3)
-xy_carriage.location.x += 0.2
+xy_carriage.location.x += 20
 key_loc(xy_carriage, f3)
 key_loc(y_gantry, f3)
 key_loc(x_axis, f3)
