@@ -2,7 +2,12 @@
 
 import bpy
 import csv
+import sys
+import os
 import numpy as np
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from utils import get_axis_min, get_axis_max
 
 # Path to the CSV file (relative to the .blend file)
 csv_path = bpy.path.abspath("//from_gcode/pathout.csv")
@@ -37,29 +42,7 @@ with open(csv_path, newline='') as csvfile:
         points.append(tuple(map(float, row)))
 points = np.array(points)
 
-# Get axis minimums from Blender constraints
-def get_axis_min(obj, axis):
-    for constraint in obj.constraints:
-        if constraint.type == 'LIMIT_LOCATION':
-            if axis == 'X':
-                return constraint.min_x if constraint.use_min_x else 0.0
-            elif axis == 'Y':
-                return constraint.min_y if constraint.use_min_y else 0.0
-            elif axis == 'Z':
-                return constraint.min_z if constraint.use_min_z else 0.0
-    return 0.0
 
-# Get axis minimums from Blender constraints
-def get_axis_max(obj, axis):
-    for constraint in obj.constraints:
-        if constraint.type == 'LIMIT_LOCATION':
-            if axis == 'X':
-                return constraint.max_x if constraint.use_max_x else 0.0
-            elif axis == 'Y':
-                return constraint.max_y if constraint.use_max_y else 0.0
-            elif axis == 'Z':
-                return constraint.max_z if constraint.use_max_z else 0.0
-    return 0.0
 
 
 x_min = get_axis_min(x_axis, 'X')
